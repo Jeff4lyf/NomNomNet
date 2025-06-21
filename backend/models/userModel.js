@@ -1,0 +1,57 @@
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcrypt");
+
+const Schema = mongoose.Schema;
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  username: {
+    type: String,
+    required: true,
+  },
+});
+
+userSchema.statics.signup = async function (email, password, username) {
+  if (!email || !password || !username) throw Error("Please enter all fields");
+  if (!validator.isEmail(email)) throw Error("Please enter valid email");
+  if (!validator.isStrongPassword(password))
+    throw Error("Password is not strong enough");
+  const exists = await this.findOne({ email });
+  if (exists) throw Error("Email already in use");
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  const user = await this.create({ email, password: hash, username });
+  return user;
+};
+userSchema.statics.login = async function (email, password) {
+  if (!email || !password) throw Error("Please enter all fields");
+  if (!validator.isEmail(email)) throw Error("Please enter valid email");
+
+  const user = await this.findOne({ email });
+  if (!user) throw Error("Please signup first");
+
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) throw Error("Invalid login credentials");
+  return user;
+};
+
+userSchema.statics.deleteUser = async function (email, password) {
+  if (!email || !password) throw Error("Please enter all fields");
+  const user = await this.findOne({ email });
+  if (!user) throw Error("User not found");
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) throw Error("Invalid credentials");
+  await this.deleteOne({ _id: user._id });
+
+  return { message: "User deleted successfully" };
+};
+
+module.exports = mongoose.model("User", userSchema);
