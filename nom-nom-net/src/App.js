@@ -2,24 +2,30 @@ import Navbar from './navbar';
 import Home from './home';
 import Login from './login';
 import SignUp from './signup';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
+
 function App() {
   return (
     <Router>
     <div className="App">
       <Navbar />
       <div className="content">
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <SignUp />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <Routes>
+
+          {/*public routes*/}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+
+          {/*Protected Routes*/}
+          <Route path="/" 
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>} 
+          />
+
+        </Routes>
       </div>
     </div>
     </Router>
