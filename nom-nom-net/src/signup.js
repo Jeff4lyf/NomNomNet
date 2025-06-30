@@ -2,6 +2,8 @@ import "./index.css"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { useAuth } from "./Context/AuthContext"; 
+
 
 const Signup = () => {
 
@@ -10,6 +12,9 @@ const Signup = () => {
         email:"",
         password:""
     });
+
+    const { setUser } = useAuth();
+
 
     const[error, setError]= useState("");
     const navigate =useNavigate();
@@ -29,23 +34,18 @@ const Signup = () => {
         try{
             //send post req
             //const response = await axios.post("", formData)
-            // Simulate a delay and a mock response
-            await new Promise((res) => setTimeout(res, 1000)); // 1 second fake delay
+            const response = await axios.post("http://localhost:5000/signup", formData);
 
-            const response = {
-                data: {
-                    token: "mock-jwt-token",
-                    user: {
-                        id: "12345",
-                        username: formData.username,
-                        email: formData.email,
-                    },
-                },
+            const userData = {
+                id: response.data.user._id,
+                token: response.data.token,
+                username: response.data.user.username,
+                email: response.data.user.email,
             };
 
-            //store token
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("user", JSON.stringify(response.data.user))
+            setUser(userData); // 🔥 context
+            localStorage.setItem("user", JSON.stringify(userData)); // 🔄 persist
+            
 
             //redirect to home or dashboard
             console.log("form success hahah")
