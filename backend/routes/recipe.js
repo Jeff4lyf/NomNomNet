@@ -10,7 +10,7 @@ const {
 const requireAuth = require('../middleware/requireAuth');
 const router = express.Router();
 
-//router.use(requireAuth);
+router.use(requireAuth);
 router.get("/recipes", getAll);
 router.get("/recipe/:id",getrecipe);
 router.get("/recipe/user", getUserRecipes);
