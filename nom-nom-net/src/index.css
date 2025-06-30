@@ -134,3 +134,60 @@ h1.signup {
 .signup-link a:hover {
   text-decoration: underline;
 }
+
+.recipe-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recipe-form input{
+   padding: 10px;
+  margin: 8px 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize:vertical;
+  height: 100px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #FF6B6B;
+  font-size: 15px;
+  
+
+}
+
+
+.form-group {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Ensures label is left-aligned */
+}
+
+.recipe-form button {
+  background-color: #21adad;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100px;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-top: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
